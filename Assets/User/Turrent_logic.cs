@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Turrent_logic : MonoBehaviour
 {
+    // Shooting Variable
+    [SerializeField] ParticleSystem cannon;
+    [SerializeField] float fireRate;
+    bool fireCooldown;
 
-    [SerializeField] GameObject cannon;
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -30,24 +33,29 @@ public class Turrent_logic : MonoBehaviour
             transform.Rotate(0, 90, 0);
         }
     }
+    //---------------Shooting Controller
     void ShootCannon()
     {
         if (Input.GetButton("Jump"))
-        {
-            FireCannon(true);
-            Debug.Log("fire!");
+        { 
+            if (fireCooldown) return;
+            cannon.Emit(1); //shoot particle 1 at a time
+            fireCooldown = true;
+            StartCoroutine(StopCoolDownAfterTime());
         }
         else
         {
-            FireCannon(false);
+            return;
+        }
+
+        IEnumerator StopCoolDownAfterTime()
+        {
+            yield return new WaitForSeconds(fireRate);
+            fireCooldown = false;
         }
     }
-    //shoot particle 1 at a time
-    void FireCannon(bool isActive)
-    {
-        var shell = cannon.GetComponent<ParticleSystem>().emission;
-        shell.enabled = isActive;
-    }
+    
+
 
 }
 

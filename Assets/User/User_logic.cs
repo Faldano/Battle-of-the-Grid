@@ -38,4 +38,23 @@ public class User_logic : MonoBehaviour
             }
         }
     }
+
+    //----User Collision Control
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void OnParticleCollision(GameObject other)
+    {
+        if (other.CompareTag("EnemyCannon"))
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
 }
